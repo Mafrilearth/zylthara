@@ -3,13 +3,13 @@
 | Attribute | Value |
 | :--- | :--- |
 | **Document ID** | SPEC-001 |
-| **Document Version** | 1.0.0 |
-| **Application Version** | 0.1.0-alpha.1 |
+| **Document Version** | 1.1.0 |
+| **Application Version** | 0.2.0-alpha.1 |
 | **Status** | Approved |
 | **Date Established** | 2026-11-11 |
 | **Execution Deadline** | 14 calendar days |
 | **Document Owner** | Fauzul (Solo Developer) |
-| **SSOT for** | Phase 1 scope, acceptance criteria, constraints, security principles |
+| **SSOT for** | Phase 1 & Phase 2 scope, acceptance criteria, constraints, security principles |
 
 ---
 
@@ -78,15 +78,17 @@ If 9 of 10 criteria are satisfied, Phase 1 is not complete.
 
 ### 5.1 Database Schema
 
-Permitted tables in Phase 1:
+Permitted tables in Phase 1 & Phase 2:
 
 | Table | Function |
 | :--- | :--- |
 | `User` | Registered user data |
 | `AuditLog` | Audit trail of critical actions |
 | `Role` (enum) | User role: `STUDENT`, `ADMIN` |
+| `Schedule` | Exam schedules created by Admin |
+| `Booking` | Ticket bookings by test takers |
 
-Prohibited tables in Phase 1: `Schedule`, `Booking`, `Attempt`, `Question`, `Answer`, `Score`, `Certificate`, `Payment`, `ExamFlag`.
+Prohibited tables: `Attempt`, `Question`, `Answer`, `Score`, `Certificate`, `Payment`, `ExamFlag`.
 
 ### 5.2 Tech Stack (Final, Immutable)
 
@@ -117,7 +119,7 @@ Prohibited tables in Phase 1: `Schedule`, `Booking`, `Attempt`, `Question`, `Ans
 | **SEC-07** | Audit log is append-only | Repository exposes only `create` and `findMany` |
 | **SEC-08** | Encryption in transit (TLS) to Neon Postgres | `sslmode=require` in connection string |
 | **SEC-09** | Password hashing delegated to Neon Managed Better Auth | App never reads/writes `password` directly |
-| **SEC-10** | Data minimization: only `email`, `name`, `password` | No additional PII in Phase 1 |
+| **SEC-10** | Data minimization: only necessary fields in scope | No extraneous PII collected |
 
 Violation of any SEC principle results in Phase 1 being declared incomplete.
 
@@ -141,3 +143,4 @@ SSOT Rule: the same information must not appear in two documents. If duplication
 | Version | Date | Change |
 | :--- | :--- | :--- |
 | 1.0.0 | 2026-11-11 | Initial version, approved |
+| 1.1.0 | 2026-11-11 | Unlock Phase 2 database schema: permit `Schedule` and `Booking` |

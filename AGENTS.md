@@ -3,8 +3,8 @@
 ## 1. Project Identity
 
 - **Project**: Zylthara — Institutional Test Integrity Engine (Showcase Edition).
-- **Current Phase**: Phase 1 — Authentication Foundation (alpha).
-- **Primary Goal**: Build a rock-solid authentication system (register, login, logout, protected dashboard).
+- **Current Phase**: Phase 2 — Booking System.
+- **Primary Goal**: Build a rock-solid authentication and exam schedule booking system (register, login, logout, protected dashboard, schedule management, and ticket booking).
 
 ## 2. Immutable Tech Stack
 
@@ -22,10 +22,10 @@
 
 Do NOT suggest or use any other framework, database, or library.
 
-## 3. Phase 1 Hard Constraints (The "Do NOT" List)
+## 3. Active Phase Hard Constraints (The "Do NOT" List)
 
-- **Database Tables**: Only `User`, `AuditLog`, and enum `Role` are permitted. Creating any other table (e.g., `Booking`, `Question`, `Score`) is a CRITICAL FAILURE.
-- **Features**: Implement ONLY register, login, logout, and a protected `/dashboard`. Any other feature request must be added to `docs/BACKLOG.md` and NOT implemented.
+- **Database Tables**: Only `User`, `AuditLog`, `Schedule`, `Booking`, and enum `Role` are permitted. Creating any other table (e.g., `Attempt`, `Question`, `Score`, `Certificate`, `Payment`, `ExamFlag`) is a CRITICAL FAILURE.
+- **Features**: Implement ONLY authentication (register, login, logout, protected dashboard), Admin CRUD for schedules, and Test Taker booking of schedules/tickets. Any other feature request must be added to `docs/BACKLOG.md` and NOT implemented.
 - **Scope Creep**: Never start a new feature, refactor, or add a dependency without explicit user approval.
 
 ## 4. Mandatory Security & Quality Gates (SEC-01 to SEC-10)
@@ -36,12 +36,12 @@ Every code change must adhere to these non-negotiable principles:
 2. **SEC-02 — No `answerKey` Exposure**: The `answerKey` field must NEVER be included in any API response or client-side code.
 3. **SEC-03 — RBAC**: Every Server Action must check user role via `requireRole()`.
 4. **SEC-04 — UUID & Soft Delete**: All tables use UUID primary keys and `deletedAt` for soft deletion.
-5. **SEC-05 — Audit Logging**: Every critical action (register, login, logout) must create an `AuditLog` entry.
+5. **SEC-05 — Audit Logging**: Every critical action (register, login, logout, schedule creation, booking) must create an `AuditLog` entry.
 6. **SEC-06 — Audit Metadata Completeness**: Each `AuditLog` entry must contain `userId`, `action`, `createdAt`, `ipAddress`, and `metadata`.
 7. **SEC-07 — Append-Only Audit**: The `AuditLog` repository must expose only `create` and `findMany`. No `update` or `delete`.
 8. **SEC-08 — TLS**: All database connections use `sslmode=require`.
 9. **SEC-09 — Password Hashing**: Delegated to Neon Managed Better Auth. Application code never reads or writes `password` directly.
-10. **SEC-10 — Data Minimization**: Only collect `email`, `name`, `password` in Phase 1.
+10. **SEC-10 — Data Minimization**: Only collect necessary data strictly in scope for the active phase.
 
 ## 5. Source of Truth (SSOT) References
 
@@ -71,7 +71,7 @@ When asked to build a feature, respond in this exact order:
 - Adding dependencies not listed in Section 2.
 - Modifying `CHANGELOG.md`, `docs/SPEC.md`, `docs/DECISIONS.md`, or `docs/BACKLOG.md` without explicit user instruction.
 - Proposing alternative frameworks or architecture.
-- Starting Phase 2 work while Phase 1 criteria are unverified.
+- Starting Phase 3 work while Phase 2 criteria are unverified.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
