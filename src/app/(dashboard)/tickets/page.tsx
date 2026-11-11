@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { getMyTickets } from "@/lib/actions/booking";
+import { StartExamButton } from "@/components/booking/StartExamButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -106,6 +107,8 @@ async function TicketsList() {
                   <span className="text-slate-300">{bookedAtStr} WIB</span>
                 </div>
               </div>
+
+              <StartExamButton scheduleId={ticket.schedule.id} />
             </CardContent>
           </Card>
         );

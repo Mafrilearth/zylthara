@@ -3,8 +3,8 @@
 ## 1. Project Identity
 
 - **Project**: Zylthara — Institutional Test Integrity Engine (Showcase Edition).
-- **Current Phase**: Phase 2 — Booking System.
-- **Primary Goal**: Build a rock-solid authentication and exam schedule booking system (register, login, logout, protected dashboard, schedule management, and ticket booking).
+- **Current Phase**: Phase 3 — Test Engine & Timer.
+- **Primary Goal**: Build a high-integrity institutional test engine with server-side Redis timer authority, non-leaking answer keys, and auto-save capabilities.
 
 ## 2. Immutable Tech Stack
 
@@ -17,15 +17,15 @@
 | Auth | Neon Managed Better Auth |
 | Styling | Tailwind CSS + shadcn/ui |
 | Validation | Zod |
-| Cache (ready, inactive) | Upstash Redis |
+| Cache & Timer Authority | Upstash Redis |
 | Deployment | Vercel Hobby |
 
 Do NOT suggest or use any other framework, database, or library.
 
 ## 3. Active Phase Hard Constraints (The "Do NOT" List)
 
-- **Database Tables**: Only `User`, `AuditLog`, `Schedule`, `Booking`, and enum `Role` are permitted. Creating any other table (e.g., `Attempt`, `Question`, `Score`, `Certificate`, `Payment`, `ExamFlag`) is a CRITICAL FAILURE.
-- **Features**: Implement ONLY authentication (register, login, logout, protected dashboard), Admin CRUD for schedules, and Test Taker booking of schedules/tickets. Any other feature request must be added to `docs/BACKLOG.md` and NOT implemented.
+- **Database Tables**: Only `User`, `AuditLog`, `Schedule`, `Booking`, `Passage`, `Question`, `Attempt`, `Answer`, and enums `Role`, `BookingStatus`, `Section`, `AttemptStatus` are permitted. Creating any other table (e.g., `Score`, `Certificate`, `Payment`, `ExamFlag`) is a CRITICAL FAILURE.
+- **Features**: Implement ONLY authentication, schedule booking, test engine with questions/passages, server-side timer, answer saving, and exam submission. Any other feature request must be added to `docs/BACKLOG.md` and NOT implemented.
 - **Scope Creep**: Never start a new feature, refactor, or add a dependency without explicit user approval.
 
 ## 4. Mandatory Security & Quality Gates (SEC-01 to SEC-10)
@@ -36,7 +36,7 @@ Every code change must adhere to these non-negotiable principles:
 2. **SEC-02 — No `answerKey` Exposure**: The `answerKey` field must NEVER be included in any API response or client-side code.
 3. **SEC-03 — RBAC**: Every Server Action must check user role via `requireRole()`.
 4. **SEC-04 — UUID & Soft Delete**: All tables use UUID primary keys and `deletedAt` for soft deletion.
-5. **SEC-05 — Audit Logging**: Every critical action (register, login, logout, schedule creation, booking) must create an `AuditLog` entry.
+5. **SEC-05 — Audit Logging**: Every critical action (register, login, logout, schedule creation, booking, exam start, exam submit) must create an `AuditLog` entry.
 6. **SEC-06 — Audit Metadata Completeness**: Each `AuditLog` entry must contain `userId`, `action`, `createdAt`, `ipAddress`, and `metadata`.
 7. **SEC-07 — Append-Only Audit**: The `AuditLog` repository must expose only `create` and `findMany`. No `update` or `delete`.
 8. **SEC-08 — TLS**: All database connections use `sslmode=require`.
@@ -71,14 +71,14 @@ When asked to build a feature, respond in this exact order:
 - Adding dependencies not listed in Section 2.
 - Modifying `CHANGELOG.md`, `docs/SPEC.md`, `docs/DECISIONS.md`, or `docs/BACKLOG.md` without explicit user instruction.
 - Proposing alternative frameworks or architecture.
-- Starting Phase 3 work while Phase 2 criteria are unverified.
+- Starting Phase 4 work while Phase 3 criteria are unverified.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in node_modules/next/dist/docs/ (resolved from this file's directory; in monorepos the next package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+This block is written and re-added by next dev — verify at node_modules/next/dist/server/lib/generate-agent-files.js. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->

@@ -78,7 +78,7 @@ If 9 of 10 criteria are satisfied, Phase 1 is not complete.
 
 ### 5.1 Database Schema
 
-Permitted tables in Phase 1 & Phase 2:
+Permitted tables in Phase 1, Phase 2, & Phase 3:
 
 | Table | Function |
 | :--- | :--- |
@@ -87,8 +87,12 @@ Permitted tables in Phase 1 & Phase 2:
 | `Role` (enum) | User role: `STUDENT`, `ADMIN` |
 | `Schedule` | Exam schedules created by Admin |
 | `Booking` | Ticket bookings by test takers |
+| `Passage` | Reading & listening passages |
+| `Question` | Questions with choices and server-only answer key |
+| `Attempt` | Exam session attempts by test takers |
+| `Answer` | Test taker responses per question |
 
-Prohibited tables: `Attempt`, `Question`, `Answer`, `Score`, `Certificate`, `Payment`, `ExamFlag`.
+Prohibited tables: `Score`, `Certificate`, `Payment`, `ExamFlag`.
 
 ### 5.2 Tech Stack (Final, Immutable)
 

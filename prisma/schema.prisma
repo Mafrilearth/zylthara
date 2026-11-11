@@ -19,6 +19,19 @@ enum BookingStatus {
   CANCELLED
 }
 
+enum Section {
+  LISTENING
+  STRUCTURE
+  READING
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  FINISHED
+  EXPIRED
+  ABANDONED
+}
+
 model User {
   id            String    @id @default(uuid()) @db.Uuid
   email         String    @unique
@@ -32,6 +45,7 @@ model User {
 
   auditLogs     AuditLog[]
   bookings      Booking[]
+  attempts      Attempt[]
 
   @@index([email])
   @@index([role])
@@ -65,6 +79,7 @@ model Schedule {
   deletedAt   DateTime?
 
   bookings    Booking[]
+  attempts    Attempt[]
 
   @@index([date])
 }
@@ -85,4 +100,72 @@ model Booking {
   @@index([userId])
   @@index([scheduleId])
   @@index([ticketCode])
+}
+
+model Passage {
+  id        String    @id @default(uuid()) @db.Uuid
+  title     String
+  content   String    @db.Text
+  section   Section
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questions Question[]
+
+  @@index([section])
+}
+
+model Question {
+  id        String    @id @default(uuid()) @db.Uuid
+  passageId String?   @db.Uuid
+  passage   Passage?  @relation(fields: [passageId], references: [id], onDelete: Cascade)
+  section   Section   @default(STRUCTURE)
+  text      String    @db.Text
+  options   Json
+  answerKey String
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  answers   Answer[]
+
+  @@index([section])
+  @@index([passageId])
+}
+
+model Attempt {
+  id          String        @id @default(uuid()) @db.Uuid
+  userId      String        @db.Uuid
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scheduleId  String        @db.Uuid
+  schedule    Schedule      @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  status      AttemptStatus @default(IN_PROGRESS)
+  startedAt   DateTime      @default(now())
+  finishedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+
+  answers     Answer[]
+
+  @@index([userId])
+  @@index([scheduleId])
+}
+
+model Answer {
+  id         String    @id @default(uuid()) @db.Uuid
+  attemptId  String    @db.Uuid
+  attempt    Attempt   @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId String    @db.Uuid
+  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  choice     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId])
+  @@index([questionId])
 }

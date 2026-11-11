@@ -13,6 +13,8 @@
     "@hookform/resolvers": "^7.0.5",
     "@neon/auth": "^0.8.2",
     "@prisma/client": "^6.19.3",
+    "@upstash/ratelimit": "^2.2.0",
+    "@upstash/redis": "^1.41.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.71.0",
     "next": "16.4.6",
@@ -31,7 +33,11 @@
     "eslint-config-next": "16.4.6",
     "prisma": "^6.19.3",
     "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "packageManager": "pnpm@12.11.2"
 }
