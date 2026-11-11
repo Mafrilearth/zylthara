@@ -13,6 +13,12 @@ enum Role {
   ADMIN
 }
 
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
 model User {
   id            String    @id @default(uuid()) @db.Uuid
   email         String    @unique
@@ -25,6 +31,7 @@ model User {
   deletedAt     DateTime?
 
   auditLogs     AuditLog[]
+  bookings      Booking[]
 
   @@index([email])
   @@index([role])
@@ -44,4 +51,38 @@ model AuditLog {
 
   @@index([userId, createdAt])
   @@index([action, createdAt])
+}
+
+model Schedule {
+  id          String    @id @default(uuid()) @db.Uuid
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime
+  location    String
+  quota       Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  bookings    Booking[]
+
+  @@index([date])
+}
+
+model Booking {
+  id          String        @id @default(uuid()) @db.Uuid
+  userId      String        @db.Uuid
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scheduleId  String        @db.Uuid
+  schedule    Schedule      @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  status      BookingStatus @default(CONFIRMED)
+  ticketCode  String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+
+  @@unique([userId, scheduleId])
+  @@index([userId])
+  @@index([scheduleId])
+  @@index([ticketCode])
 }
