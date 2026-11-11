@@ -1,13 +1,7 @@
 import { Suspense } from "react";
-import { getAdminSchedules } from "@/lib/actions/schedule";
 import { CreateScheduleForm } from "@/components/admin/CreateScheduleForm";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAdminSchedules } from "@/lib/actions/schedule";
 
 async function SchedulesTable() {
   const schedules = await getAdminSchedules();
@@ -113,7 +107,9 @@ export default function AdminSchedulesPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<div className="py-8 text-center text-slate-500">Memuat data jadwal...</div>}>
+          <Suspense
+            fallback={<div className="py-8 text-center text-slate-500">Memuat data jadwal...</div>}
+          >
             <SchedulesTable />
           </Suspense>
         </CardContent>
@@ -121,4 +117,3 @@ export default function AdminSchedulesPage() {
     </div>
   );
 }
-

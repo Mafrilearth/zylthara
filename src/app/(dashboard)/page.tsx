@@ -1,15 +1,9 @@
-import { Suspense } from "react";
 import Link from "next/link";
+import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/lib/auth/server";
 import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
 
 async function CandidateProfile() {
   let session = null;
@@ -40,23 +34,17 @@ async function CandidateProfile() {
       <Card className="border-slate-800 bg-slate-900/60 shadow-xl">
         <CardHeader>
           <CardTitle>Informasi Profil Peserta</CardTitle>
-          <CardDescription>
-            Data kredensial resmi yang tercatat di sistem Zylthara.
-          </CardDescription>
+          <CardDescription>Data kredensial resmi yang tercatat di sistem Zylthara.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="rounded-lg border border-slate-800 bg-slate-950/50 p-4">
               <span className="text-xs text-slate-400 block mb-1">Nama Lengkap</span>
-              <span className="text-sm font-semibold text-slate-100">
-                {candidateName}
-              </span>
+              <span className="text-sm font-semibold text-slate-100">{candidateName}</span>
             </div>
             <div className="rounded-lg border border-slate-800 bg-slate-950/50 p-4">
               <span className="text-xs text-slate-400 block mb-1">Alamat Email</span>
-              <span className="text-sm font-semibold text-slate-100">
-                {candidateEmail}
-              </span>
+              <span className="text-sm font-semibold text-slate-100">{candidateEmail}</span>
             </div>
             <div className="rounded-lg border border-slate-800 bg-slate-950/50 p-4">
               <span className="text-xs text-slate-400 block mb-1">Peran Akun</span>
@@ -101,7 +89,10 @@ async function CandidateProfile() {
           </CardHeader>
           <CardContent>
             <Link href="/tickets">
-              <Button variant="outline" className="w-full border-slate-700 text-slate-200 hover:bg-slate-800">
+              <Button
+                variant="outline"
+                className="w-full border-slate-700 text-slate-200 hover:bg-slate-800"
+              >
                 Lihat Tiket Saya
               </Button>
             </Link>

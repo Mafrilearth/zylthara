@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { getAvailableSchedules } from "@/lib/actions/booking";
 import { ScheduleList } from "@/components/booking/ScheduleList";
+import { getAvailableSchedules } from "@/lib/actions/booking";
 
 async function SchedulesContainer() {
   const schedules = await getAvailableSchedules();
@@ -11,9 +11,7 @@ export default function SchedulesPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100">
-          Jadwal Ujian Tersedia
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight text-slate-100">Jadwal Ujian Tersedia</h2>
         <p className="text-sm text-slate-400">
           Pilih sesi pengujian yang sesuai dan lakukan booking kuota ujian Anda.
         </p>
@@ -21,9 +19,7 @@ export default function SchedulesPage() {
 
       <Suspense
         fallback={
-          <div className="py-12 text-center text-slate-500">
-            Memuat daftar sesi ujian...
-          </div>
+          <div className="py-12 text-center text-slate-500">Memuat daftar sesi ujian...</div>
         }
       >
         <SchedulesContainer />
@@ -31,4 +27,3 @@ export default function SchedulesPage() {
     </div>
   );
 }
-

@@ -13,4 +13,3 @@ export const SaveAnswerSchema = z.object({
 export const SubmitExamSchema = z.object({
   attemptId: z.string().uuid("ID Sesi Ujian tidak valid"),
 });
-

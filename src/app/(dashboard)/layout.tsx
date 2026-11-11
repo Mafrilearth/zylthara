@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
+import { logoutUser } from "@/lib/actions/auth";
 import { auth } from "@/lib/auth/server";
 import { prisma } from "@/lib/prisma";
-import { logoutUser } from "@/lib/actions/auth";
-import { Button } from "@/components/ui/button";
 
 async function DashboardNav() {
   let user = null;
@@ -24,30 +24,19 @@ async function DashboardNav() {
     <div className="flex items-center justify-between w-full">
       <div className="flex items-center gap-6">
         <Link href="/dashboard" className="flex flex-col">
-          <span className="text-xl font-bold tracking-tight text-slate-100">
-            Zylthara
-          </span>
+          <span className="text-xl font-bold tracking-tight text-slate-100">Zylthara</span>
           <span className="text-[10px] font-medium text-slate-400">
             Institutional Test Integrity Engine
           </span>
         </Link>
         <nav className="hidden sm:flex items-center gap-4 text-sm font-medium">
-          <Link
-            href="/dashboard"
-            className="text-slate-300 hover:text-white transition-colors"
-          >
+          <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors">
             Dashboard
           </Link>
-          <Link
-            href="/schedules"
-            className="text-slate-300 hover:text-white transition-colors"
-          >
+          <Link href="/schedules" className="text-slate-300 hover:text-white transition-colors">
             Jadwal Ujian
           </Link>
-          <Link
-            href="/tickets"
-            className="text-slate-300 hover:text-white transition-colors"
-          >
+          <Link href="/tickets" className="text-slate-300 hover:text-white transition-colors">
             Tiket Saya
           </Link>
           {isAdmin && (
@@ -106,11 +95,7 @@ function DashboardNavFallback() {
   );
 }
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
@@ -120,9 +105,7 @@ export default function DashboardLayout({
           </Suspense>
         </div>
       </header>
-      <main className="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 space-y-8">
-        {children}
-      </main>
+      <main className="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 space-y-8">{children}</main>
     </div>
   );
 }

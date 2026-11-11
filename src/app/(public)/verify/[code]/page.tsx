@@ -1,8 +1,8 @@
-import React, { Suspense } from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import { Card } from "@/components/ui/card";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { prisma } from "@/lib/prisma";
 
 interface VerifyPageProps {
   params: Promise<{ code: string }>;
@@ -32,7 +32,7 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
     },
   });
 
-  if (!certificate || !certificate.attempt.score) {
+  if (!certificate?.attempt.score) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-slate-100">
         <Card className="max-w-lg w-full border-rose-900/60 bg-slate-900/90 shadow-2xl p-8 text-center space-y-6">
@@ -45,8 +45,8 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
             </span>
             <h1 className="text-2xl font-bold text-slate-100">Sertifikat Tidak Ditemukan</h1>
             <p className="text-sm text-slate-400">
-              Kode verifikasi <span className="font-mono text-rose-300 font-semibold">{code}</span> tidak terdaftar
-              dalam basis data integritas pengujian Zylthara.
+              Kode verifikasi <span className="font-mono text-rose-300 font-semibold">{code}</span>{" "}
+              tidak terdaftar dalam basis data integritas pengujian Zylthara.
             </p>
           </div>
           <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-400 text-left space-y-1">
@@ -56,7 +56,10 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
           </div>
           <div className="pt-2">
             <Link href="/">
-              <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:bg-slate-800">
+              <Button
+                variant="outline"
+                className="w-full border-slate-700 text-slate-300 hover:bg-slate-800"
+              >
                 Kembali ke Beranda
               </Button>
             </Link>
@@ -76,7 +79,9 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-slate-100">
         <Card className="max-w-lg w-full border-rose-900/60 bg-slate-900/90 shadow-2xl p-8 text-center space-y-4">
           <h1 className="text-xl font-bold text-slate-100">Skor Ujian Belum Diterbitkan</h1>
-          <p className="text-sm text-slate-400">Sertifikat ini belum memiliki lembar skor terkonfirmasi.</p>
+          <p className="text-sm text-slate-400">
+            Sertifikat ini belum memiliki lembar skor terkonfirmasi.
+          </p>
         </Card>
       </div>
     );
@@ -108,18 +113,24 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
         {/* Certificate Card */}
         <Card className="border-slate-800 bg-slate-900/80 shadow-2xl p-6 sm:p-8 space-y-6">
           <div className="border-b border-slate-800 pb-5">
-            <p className="text-xs uppercase font-medium text-slate-400 tracking-wider">Nama Peserta Ujian</p>
+            <p className="text-xs uppercase font-medium text-slate-400 tracking-wider">
+              Nama Peserta Ujian
+            </p>
             <h2 className="text-2xl font-bold text-slate-100 mt-1">{user.name}</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-3.5 rounded-lg bg-slate-950/80 border border-slate-800/80">
               <p className="text-xs text-slate-400 font-medium">Nomor Sertifikat</p>
-              <p className="font-mono text-sm font-semibold text-slate-200 mt-1">{certificate.certificateNo}</p>
+              <p className="font-mono text-sm font-semibold text-slate-200 mt-1">
+                {certificate.certificateNo}
+              </p>
             </div>
             <div className="p-3.5 rounded-lg bg-slate-950/80 border border-slate-800/80">
               <p className="text-xs text-slate-400 font-medium">Kode Verifikasi</p>
-              <p className="font-mono text-sm font-semibold text-emerald-400 mt-1">{certificate.verificationCode}</p>
+              <p className="font-mono text-sm font-semibold text-emerald-400 mt-1">
+                {certificate.verificationCode}
+              </p>
             </div>
             <div className="p-3.5 rounded-lg bg-slate-950/80 border border-slate-800/80">
               <p className="text-xs text-slate-400 font-medium">Tanggal Diterbitkan</p>
@@ -135,12 +146,12 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
           <div className="p-5 rounded-xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border border-slate-800 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs uppercase tracking-wider text-slate-400 font-medium">Total Skor ITP</p>
+                <p className="text-xs uppercase tracking-wider text-slate-400 font-medium">
+                  Total Skor ITP
+                </p>
                 <p className="text-xs text-slate-500">Skala Standar TOEFL ITP (310 - 677)</p>
               </div>
-              <div className="text-3xl font-black text-cyan-400">
-                {score.totalScore}
-              </div>
+              <div className="text-3xl font-black text-cyan-400">{score.totalScore}</div>
             </div>
 
             <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-center">
@@ -171,7 +182,10 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
               </Button>
             </a>
             <Link href="/" className="sm:w-auto">
-              <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:bg-slate-800">
+              <Button
+                variant="outline"
+                className="w-full border-slate-700 text-slate-300 hover:bg-slate-800"
+              >
                 Beranda
               </Button>
             </Link>
@@ -183,7 +197,10 @@ async function VerifyContent({ params }: { params: Promise<{ code: string }> }) 
           <p>
             Kredensial ini diverifikasi secara kriptografis menggunakan audit trail Zylthara Engine.
           </p>
-          <p>© {new Date().getFullYear()} Zylthara Institutional Test Integrity. Seluruh hak cipta dilindungi.</p>
+          <p>
+            © {new Date().getFullYear()} Zylthara Institutional Test Integrity. Seluruh hak cipta
+            dilindungi.
+          </p>
         </div>
       </div>
     </div>

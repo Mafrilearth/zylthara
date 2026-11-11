@@ -1,9 +1,9 @@
-import { Suspense } from "react";
-import { getExamSession } from "@/lib/actions/exam";
-import { TestEngineClient } from "@/components/exam/TestEngineClient";
 import Link from "next/link";
+import { Suspense } from "react";
+import { TestEngineClient } from "@/components/exam/TestEngineClient";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { getExamSession } from "@/lib/actions/exam";
 
 async function ExamSessionContent({
   attemptIdPromise,
@@ -24,7 +24,8 @@ async function ExamSessionContent({
             <h2 className="text-2xl font-bold text-slate-100">Sesi Ujian Selesai</h2>
             <p className="text-sm text-slate-400">
               Sesi ujian ini telah berstatus{" "}
-              <strong className="text-amber-400">{session.status}</strong> dan tidak lagi menerima perubahan jawaban.
+              <strong className="text-amber-400">{session.status}</strong> dan tidak lagi menerima
+              perubahan jawaban.
             </p>
           </div>
           <Link href="/tickets">
@@ -68,11 +69,7 @@ function ExamLoadingSkeleton() {
   );
 }
 
-export default function ExamTestPage({
-  params,
-}: {
-  params: Promise<{ attemptId: string }>;
-}) {
+export default function ExamTestPage({ params }: { params: Promise<{ attemptId: string }> }) {
   return (
     <Suspense fallback={<ExamLoadingSkeleton />}>
       <ExamSessionContent attemptIdPromise={params} />

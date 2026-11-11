@@ -1,4 +1,4 @@
-import { Section } from "@prisma/client";
+import type { Section } from "@prisma/client";
 
 export interface QuestionAnswerPair {
   question: {
@@ -35,14 +35,15 @@ export interface ITPScoreResult {
  */
 export function calculateITPScores(
   answers: QuestionAnswerPair[],
-  totalQuestionsBySection?: Record<Section, number>
+  totalQuestionsBySection?: Record<Section, number>,
 ): ITPScoreResult {
   let listeningCorrect = 0;
   let structureCorrect = 0;
   let readingCorrect = 0;
 
   for (const item of answers) {
-    const isCorrect = item.choice.trim().toUpperCase() === item.question.answerKey.trim().toUpperCase();
+    const isCorrect =
+      item.choice.trim().toUpperCase() === item.question.answerKey.trim().toUpperCase();
     if (isCorrect) {
       if (item.question.section === "LISTENING") listeningCorrect++;
       else if (item.question.section === "STRUCTURE") structureCorrect++;
@@ -51,11 +52,22 @@ export function calculateITPScores(
   }
 
   // Count totals either from questions array or provided total counts
-  const listeningTotal = totalQuestionsBySection?.LISTENING ?? answers.filter(a => a.question.section === "LISTENING").length;
-  const structureTotal = totalQuestionsBySection?.STRUCTURE ?? answers.filter(a => a.question.section === "STRUCTURE").length;
-  const readingTotal = totalQuestionsBySection?.READING ?? answers.filter(a => a.question.section === "READING").length;
+  const listeningTotal =
+    totalQuestionsBySection?.LISTENING ??
+    answers.filter((a) => a.question.section === "LISTENING").length;
+  const structureTotal =
+    totalQuestionsBySection?.STRUCTURE ??
+    answers.filter((a) => a.question.section === "STRUCTURE").length;
+  const readingTotal =
+    totalQuestionsBySection?.READING ??
+    answers.filter((a) => a.question.section === "READING").length;
 
-  const scaleSection = (correct: number, total: number, minScaled: number, maxScaled: number): number => {
+  const scaleSection = (
+    correct: number,
+    total: number,
+    minScaled: number,
+    maxScaled: number,
+  ): number => {
     if (total <= 0) {
       // Default to baseline minimum scale
       return minScaled;

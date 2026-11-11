@@ -8,17 +8,17 @@
 
 ## 2. Immutable Tech Stack
 
-| Layer | Technology |
-| :--- | :--- |
-| Language | TypeScript |
-| Framework | Next.js 15 (App Router) |
-| Database | Neon Postgres |
-| ORM | Prisma |
-| Auth | Neon Managed Better Auth |
-| Styling | Tailwind CSS + shadcn/ui |
-| Validation | Zod |
-| Cache & Timer Authority | Upstash Redis |
-| Deployment | Vercel Hobby |
+| Layer                   | Technology               |
+| :---------------------- | :----------------------- |
+| Language                | TypeScript               |
+| Framework               | Next.js 15 (App Router)  |
+| Database                | Neon Postgres            |
+| ORM                     | Prisma                   |
+| Auth                    | Neon Managed Better Auth |
+| Styling                 | Tailwind CSS + shadcn/ui |
+| Validation              | Zod                      |
+| Cache & Timer Authority | Upstash Redis            |
+| Deployment              | Vercel Hobby             |
 
 Do NOT suggest or use any other framework, database, or library.
 
@@ -45,13 +45,13 @@ Every code change must adhere to these non-negotiable principles:
 
 ## 5. Source of Truth (SSOT) References
 
-| Concern | Document |
-| :--- | :--- |
-| Scope & acceptance criteria | `docs/SPEC.md` |
-| Architecture decisions | `docs/DECISIONS.md` |
-| Deferred work | `docs/BACKLOG.md` |
-| Database structure | `prisma/schema.prisma` |
-| Release history | `CHANGELOG.md` |
+| Concern                     | Document               |
+| :-------------------------- | :--------------------- |
+| Scope & acceptance criteria | `docs/SPEC.md`         |
+| Architecture decisions      | `docs/DECISIONS.md`    |
+| Deferred work               | `docs/BACKLOG.md`      |
+| Database structure          | `prisma/schema.prisma` |
+| Release history             | `CHANGELOG.md`         |
 
 No information may be duplicated across documents. If duplication is found, one copy is removed.
 

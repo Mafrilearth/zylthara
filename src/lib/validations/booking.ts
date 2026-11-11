@@ -15,4 +15,3 @@ export const BookScheduleSchema = z.object({
 });
 
 export type BookScheduleInput = z.infer<typeof BookScheduleSchema>;
-

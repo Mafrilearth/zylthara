@@ -1,11 +1,11 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { requireRole } from "@/lib/auth/rbac";
-import { CreateScheduleSchema } from "@/lib/validations/booking";
-import { prisma } from "@/lib/prisma";
+import { headers } from "next/headers";
 import { createAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/auth/rbac";
+import { prisma } from "@/lib/prisma";
+import { CreateScheduleSchema } from "@/lib/validations/booking";
 
 export type ScheduleActionState = {
   success?: boolean;
@@ -15,7 +15,7 @@ export type ScheduleActionState = {
 
 export async function createSchedule(
   _prevState: ScheduleActionState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<ScheduleActionState> {
   const headerList = await headers();
   const ipAddress =
@@ -52,7 +52,7 @@ export async function createSchedule(
     const endDateTime = new Date(`${date}T${endTime}:00`);
     const scheduleDate = new Date(`${date}T00:00:00`);
 
-    if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+    if (Number.isNaN(startDateTime.getTime()) || Number.isNaN(endDateTime.getTime())) {
       return {
         success: false,
         message: "Format tanggal atau waktu tidak valid.",
@@ -144,4 +144,3 @@ export async function getAdminSchedules() {
     remainingQuota: Math.max(0, s.quota - s._count.bookings),
   }));
 }
-

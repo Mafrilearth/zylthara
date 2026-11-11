@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { startExam } from "@/lib/actions/exam";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { startExam } from "@/lib/actions/exam";
 
 export function StartExamButton({ scheduleId }: { scheduleId: string }) {
   const router = useRouter();
@@ -40,4 +40,3 @@ export function StartExamButton({ scheduleId }: { scheduleId: string }) {
     </div>
   );
 }
-

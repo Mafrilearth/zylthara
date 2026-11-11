@@ -1,14 +1,10 @@
 "use client";
 
-import { useActionState, startTransition } from "react";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterSchema, type RegisterInput } from "@/lib/validations/auth";
-import { registerUser, type RegisterState } from "@/lib/actions/auth";
+import Link from "next/link";
+import { startTransition, useActionState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -17,11 +13,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { type RegisterState, registerUser } from "@/lib/actions/auth";
+import { type RegisterInput, RegisterSchema } from "@/lib/validations/auth";
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState<RegisterState | null, FormData>(
     registerUser,
-    null
+    null,
   );
 
   const {
@@ -53,12 +53,8 @@ export default function RegisterPage() {
       <div className="w-full max-w-md space-y-6">
         {/* Header Branding */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-100">
-            Zylthara
-          </h1>
-          <p className="text-sm font-medium text-slate-400">
-            Institutional Test Integrity Engine
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-100">Zylthara</h1>
+          <p className="text-sm font-medium text-slate-400">Institutional Test Integrity Engine</p>
         </div>
 
         <Card className="border-slate-800 bg-slate-900/70 shadow-2xl">
@@ -143,11 +139,9 @@ export default function RegisterPage() {
                       : ""
                   }
                 />
-                {(clientErrors.password?.message ||
-                  state?.errors?.password?.[0]) && (
+                {(clientErrors.password?.message || state?.errors?.password?.[0]) && (
                   <p className="text-xs text-red-400">
-                    {clientErrors.password?.message ||
-                      state?.errors?.password?.[0]}
+                    {clientErrors.password?.message || state?.errors?.password?.[0]}
                   </p>
                 )}
               </div>
@@ -178,4 +172,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

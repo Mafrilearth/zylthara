@@ -2,8 +2,7 @@ import { Redis } from "@upstash/redis";
 
 // Check if Upstash Redis credentials exist in environment
 const hasUpstashConfig =
-  Boolean(process.env.UPSTASH_REDIS_REST_URL) &&
-  Boolean(process.env.UPSTASH_REDIS_REST_TOKEN);
+  Boolean(process.env.UPSTASH_REDIS_REST_URL) && Boolean(process.env.UPSTASH_REDIS_REST_TOKEN);
 
 export const redis = hasUpstashConfig
   ? new Redis({
@@ -26,7 +25,7 @@ const DEFAULT_EXAM_DURATION_MINUTES = 60;
  */
 export async function startAttemptTimer(
   attemptId: string,
-  durationMinutes: number = DEFAULT_EXAM_DURATION_MINUTES
+  durationMinutes: number = DEFAULT_EXAM_DURATION_MINUTES,
 ): Promise<{ remainingSeconds: number }> {
   const durationSeconds = durationMinutes * 60;
   const now = Date.now();
@@ -42,7 +41,7 @@ export async function startAttemptTimer(
           endTime,
           durationSeconds,
         }),
-        { ex: durationSeconds }
+        { ex: durationSeconds },
       );
       return { remainingSeconds: durationSeconds };
     } catch (err) {
@@ -59,7 +58,7 @@ export async function startAttemptTimer(
  * Checks remaining time for an exam attempt and determines if the session is still valid.
  */
 export async function checkAttemptTime(
-  attemptId: string
+  attemptId: string,
 ): Promise<{ isValid: boolean; remainingSeconds: number }> {
   if (redis) {
     try {
@@ -111,4 +110,3 @@ export async function clearAttemptTimer(attemptId: string): Promise<void> {
   }
   memoryTimers.delete(attemptId);
 }
-

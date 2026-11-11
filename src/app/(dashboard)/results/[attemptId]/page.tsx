@@ -1,9 +1,8 @@
-import React, { Suspense } from "react";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { getExamResult } from "@/lib/actions/exam";
-import { Card } from "@/components/ui/card";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { getExamResult } from "@/lib/actions/exam";
 
 interface ResultsPageProps {
   params: Promise<{ attemptId: string }>;
@@ -62,18 +61,17 @@ async function ResultsContent({ params }: { params: Promise<{ attemptId: string 
         </div>
         <div className="flex items-center gap-3">
           {certificate ? (
-            <a
-              href={`/api/certificate/${attempt.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`/api/certificate/${attempt.id}`} target="_blank" rel="noopener noreferrer">
               <Button className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-lg shadow-emerald-900/30">
                 Unduh Sertifikat PDF ↓
               </Button>
             </a>
           ) : null}
           <Link href="/tickets">
-            <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800">
+            <Button
+              variant="outline"
+              className="border-slate-700 text-slate-300 hover:bg-slate-800"
+            >
               Tiket Saya
             </Button>
           </Link>
@@ -199,11 +197,7 @@ async function ResultsContent({ params }: { params: Promise<{ attemptId: string 
                 Sertifikat ini dijamin keasliannya dan dapat diverifikasi publik tanpa login.
               </p>
             </div>
-            <a
-              href={`/api/certificate/${attempt.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`/api/certificate/${attempt.id}`} target="_blank" rel="noopener noreferrer">
               <Button size="sm" className="bg-blue-600 hover:bg-blue-500 text-white font-medium">
                 Unduh PDF Resmi (Watermark SPECIMEN)
               </Button>
@@ -237,7 +231,11 @@ async function ResultsContent({ params }: { params: Promise<{ attemptId: string 
               </Link>
             </div>
             <Link href={`/verify/${certificate.verificationCode}`} target="_blank">
-              <Button variant="outline" size="sm" className="border-slate-700 text-slate-300 hover:bg-slate-800">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-slate-700 text-slate-300 hover:bg-slate-800"
+              >
                 Uji Halaman Verifikasi Publik ↗
               </Button>
             </Link>

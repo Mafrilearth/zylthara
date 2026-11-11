@@ -1,21 +1,13 @@
 "use server";
 
-import { headers } from "next/headers";
 import { randomUUID } from "node:crypto";
-import { requireRole } from "@/lib/auth/rbac";
-import {
-  StartExamSchema,
-  SaveAnswerSchema,
-  SubmitExamSchema,
-} from "@/lib/validations/exam";
-import { prisma } from "@/lib/prisma";
+import { headers } from "next/headers";
 import { createAuditLog } from "@/lib/audit";
-import {
-  startAttemptTimer,
-  checkAttemptTime,
-  clearAttemptTimer,
-} from "@/lib/redis";
+import { requireRole } from "@/lib/auth/rbac";
+import { prisma } from "@/lib/prisma";
+import { checkAttemptTime, clearAttemptTimer, startAttemptTimer } from "@/lib/redis";
 import { calculateITPScores } from "@/lib/scoring";
+import { SaveAnswerSchema, StartExamSchema, SubmitExamSchema } from "@/lib/validations/exam";
 
 export async function startExam(scheduleId: string) {
   const headerList = await headers();
@@ -217,11 +209,7 @@ export async function getExamSession(attemptId: string) {
   };
 }
 
-export async function saveAnswer(
-  attemptId: string,
-  questionId: string,
-  choice: string
-) {
+export async function saveAnswer(attemptId: string, questionId: string, choice: string) {
   try {
     const { user } = await requireRole(["STUDENT", "ADMIN"]);
 
@@ -474,7 +462,7 @@ export async function getExamResult(attemptId: string) {
       },
     });
 
-    if (!attempt || !attempt.score) {
+    if (!attempt?.score) {
       return { success: false, message: "Hasil ujian belum tersedia." };
     }
 
@@ -505,4 +493,3 @@ export async function getExamResult(attemptId: string) {
     };
   }
 }
-

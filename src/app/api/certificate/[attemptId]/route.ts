@@ -1,23 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type DocumentProps, renderToBuffer } from "@react-pdf/renderer";
+import { type NextRequest, NextResponse } from "next/server";
 import QRCode from "qrcode";
-import { renderToBuffer, DocumentProps } from "@react-pdf/renderer";
 import React from "react";
-import { prisma } from "@/lib/prisma";
 import { CertificateDocument } from "@/components/certificate/CertificateDocument";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  segmentData: { params: Promise<{ attemptId: string }> }
+  segmentData: { params: Promise<{ attemptId: string }> },
 ) {
   try {
     const params = await segmentData.params;
     const { attemptId } = params;
 
     if (!attemptId) {
-      return NextResponse.json(
-        { error: "Attempt ID is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Attempt ID is required." }, { status: 400 });
     }
 
     const attempt = await prisma.attempt.findUnique({
@@ -29,10 +26,10 @@ export async function GET(
       },
     });
 
-    if (!attempt || !attempt.score || !attempt.certificate) {
+    if (!attempt?.score || !attempt.certificate) {
       return NextResponse.json(
         { error: "Certificate or score report not found." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -78,7 +75,7 @@ export async function GET(
           totalScore: attempt.score.totalScore,
           qrCodeDataUrl,
         },
-      }) as unknown as React.ReactElement<DocumentProps>
+      }) as unknown as React.ReactElement<DocumentProps>,
     );
 
     return new NextResponse(pdfBuffer as unknown as BodyInit, {
@@ -90,9 +87,6 @@ export async function GET(
     });
   } catch (err: unknown) {
     console.error("Certificate generation error:", err);
-    return NextResponse.json(
-      { error: "Failed to generate certificate PDF." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to generate certificate PDF." }, { status: 500 });
   }
 }

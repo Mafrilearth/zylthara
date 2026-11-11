@@ -1,15 +1,10 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { saveAnswer, submitExam } from "@/lib/actions/exam";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { saveAnswer, submitExam } from "@/lib/actions/exam";
 
 export type ExamQuestion = {
   id: string;
@@ -52,6 +47,12 @@ export function TestEngineClient({
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [, startTransition] = useTransition();
 
+  const handleAutoSubmit = useCallback(async () => {
+    setIsSubmitting(true);
+    await submitExam(attemptId);
+    setIsSubmitted(true);
+  }, [attemptId]);
+
   // Timer countdown
   useEffect(() => {
     if (isSubmitted) return;
@@ -68,13 +69,7 @@ export function TestEngineClient({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isSubmitted]);
-
-  async function handleAutoSubmit() {
-    setIsSubmitting(true);
-    await submitExam(attemptId);
-    setIsSubmitted(true);
-  }
+  }, [isSubmitted, handleAutoSubmit]);
 
   async function handleSelectChoice(questionId: string, choice: string) {
     setAnswers((prev) => ({ ...prev, [questionId]: choice }));
@@ -133,7 +128,8 @@ export function TestEngineClient({
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-slate-100">Ujian Telah Selesai</h2>
             <p className="text-sm text-slate-400">
-              Seluruh lembar jawaban Anda telah tersimpan secara resmi di server integritas Zylthara.
+              Seluruh lembar jawaban Anda telah tersimpan secara resmi di server integritas
+              Zylthara.
             </p>
           </div>
           <div className="pt-2 flex flex-col gap-3">
@@ -315,7 +311,8 @@ export function TestEngineClient({
             </Button>
 
             <span className="text-xs text-slate-400">
-              Terjawab: <strong className="text-slate-200">{answeredCount}</strong> dari {questions.length} soal
+              Terjawab: <strong className="text-slate-200">{answeredCount}</strong> dari{" "}
+              {questions.length} soal
             </span>
 
             {currentIndex < questions.length - 1 ? (
@@ -359,8 +356,8 @@ export function TestEngineClient({
                         isCurrent
                           ? "ring-2 ring-blue-400 border-white bg-blue-600 text-white shadow-lg"
                           : isAnswered
-                          ? "bg-emerald-950/80 border-emerald-600 text-emerald-300 hover:bg-emerald-900"
-                          : "bg-slate-950/80 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                            ? "bg-emerald-950/80 border-emerald-600 text-emerald-300 hover:bg-emerald-900"
+                            : "bg-slate-950/80 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                       }`}
                     >
                       {idx + 1}
@@ -395,8 +392,9 @@ export function TestEngineClient({
             <div className="space-y-2">
               <h3 className="text-xl font-bold text-slate-100">Kumpulkan Lembar Ujian?</h3>
               <p className="text-sm text-slate-300">
-                Anda telah menjawab <strong className="text-emerald-400">{answeredCount}</strong> dari{" "}
-                <strong>{questions.length}</strong> butir soal. Sesi ujian akan ditutup secara permanen setelah dikumpulkan.
+                Anda telah menjawab <strong className="text-emerald-400">{answeredCount}</strong>{" "}
+                dari <strong>{questions.length}</strong> butir soal. Sesi ujian akan ditutup secara
+                permanen setelah dikumpulkan.
               </p>
             </div>
 
@@ -423,4 +421,3 @@ export function TestEngineClient({
     </div>
   );
 }
-

@@ -1,11 +1,11 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { RegisterSchema, LoginSchema } from "@/lib/validations/auth";
-import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 import { createAuditLog } from "@/lib/audit";
 import { auth } from "@/lib/auth/server";
+import { prisma } from "@/lib/prisma";
+import { LoginSchema, RegisterSchema } from "@/lib/validations/auth";
 
 export type RegisterState = {
   success?: boolean;
@@ -31,7 +31,7 @@ export type LoginState = {
  */
 export async function registerUser(
   _prevState: RegisterState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<RegisterState> {
   const headerList = await headers();
   const ipAddress =
@@ -131,7 +131,7 @@ export async function registerUser(
  */
 export async function loginUser(
   _prevState: LoginState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<LoginState> {
   const headerList = await headers();
   const ipAddress =

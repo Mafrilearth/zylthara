@@ -1,5 +1,4 @@
-import React from "react";
-import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
@@ -185,18 +184,22 @@ export function CertificateDocument({ data }: { data: CertificateData }) {
             {/* Header */}
             <View style={styles.header}>
               <Text style={styles.orgTitle}>Zylthara Institutional Test Integrity Engine</Text>
-              <Text style={styles.subTitle}>STANDARDIZED INSTITUTIONAL ENGLISH PROFICIENCY CERTIFICATE</Text>
+              <Text style={styles.subTitle}>
+                STANDARDIZED INSTITUTIONAL ENGLISH PROFICIENCY CERTIFICATE
+              </Text>
             </View>
 
             <View style={styles.divider} />
 
             {/* Test Taker Info */}
             <View>
-              <Text style={styles.recipientText}>This official institutional certificate is proudly awarded to:</Text>
+              <Text style={styles.recipientText}>
+                This official institutional certificate is proudly awarded to:
+              </Text>
               <Text style={styles.name}>{data.testTakerName}</Text>
               <Text style={styles.statement}>
-                for demonstrating standardized English language proficiency under supervised digital test integrity
-                telemetry, administered on {data.testDate}.
+                for demonstrating standardized English language proficiency under supervised digital
+                test integrity telemetry, administered on {data.testDate}.
               </Text>
             </View>
 
@@ -207,19 +210,27 @@ export function CertificateDocument({ data }: { data: CertificateData }) {
                 <Text style={styles.colScore}>Scaled Score</Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={styles.colSection}>Section 1: Listening Comprehension (Scale: 31 - 68)</Text>
+                <Text style={styles.colSection}>
+                  Section 1: Listening Comprehension (Scale: 31 - 68)
+                </Text>
                 <Text style={styles.colScore}>{data.listeningScore}</Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={styles.colSection}>Section 2: Structure & Written Expression (Scale: 31 - 68)</Text>
+                <Text style={styles.colSection}>
+                  Section 2: Structure & Written Expression (Scale: 31 - 68)
+                </Text>
                 <Text style={styles.colScore}>{data.structureScore}</Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={styles.colSection}>Section 3: Reading Comprehension (Scale: 31 - 67)</Text>
+                <Text style={styles.colSection}>
+                  Section 3: Reading Comprehension (Scale: 31 - 67)
+                </Text>
                 <Text style={styles.colScore}>{data.readingScore}</Text>
               </View>
               <View style={styles.tableRowTotal}>
-                <Text style={[styles.colSection, styles.totalScoreText]}>Total Scaled Score (Scale: 310 - 677)</Text>
+                <Text style={[styles.colSection, styles.totalScoreText]}>
+                  Total Scaled Score (Scale: 310 - 677)
+                </Text>
                 <Text style={[styles.colScore, styles.totalScoreText]}>{data.totalScore}</Text>
               </View>
             </View>

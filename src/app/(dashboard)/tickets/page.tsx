@@ -1,15 +1,9 @@
-import { Suspense } from "react";
 import Link from "next/link";
-import { getMyTickets } from "@/lib/actions/booking";
+import { Suspense } from "react";
 import { StartExamButton } from "@/components/booking/StartExamButton";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getMyTickets } from "@/lib/actions/booking";
 
 async function TicketsList() {
   const tickets = await getMyTickets();
@@ -120,7 +114,10 @@ async function TicketsList() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="w-full sm:w-auto border-slate-700 text-slate-200 hover:bg-slate-800">
+                    <Button
+                      variant="outline"
+                      className="w-full sm:w-auto border-slate-700 text-slate-200 hover:bg-slate-800"
+                    >
                       Unduh PDF
                     </Button>
                   </a>
@@ -141,15 +138,17 @@ export default function TicketsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-100">
-            Tiket Ujian Saya
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100">Tiket Ujian Saya</h2>
           <p className="text-sm text-slate-400">
             Daftar tiket resmi untuk sesi pengujian institusi yang telah Anda pesan.
           </p>
         </div>
         <Link href="/schedules">
-          <Button variant="outline" size="sm" className="border-slate-700 text-slate-200 hover:bg-slate-800">
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-slate-700 text-slate-200 hover:bg-slate-800"
+          >
             + Booking Jadwal Lain
           </Button>
         </Link>
@@ -157,9 +156,7 @@ export default function TicketsPage() {
 
       <Suspense
         fallback={
-          <div className="py-12 text-center text-slate-500">
-            Memuat daftar tiket Anda...
-          </div>
+          <div className="py-12 text-center text-slate-500">Memuat daftar tiket Anda...</div>
         }
       >
         <TicketsList />
@@ -167,4 +164,3 @@ export default function TicketsPage() {
     </div>
   );
 }
-

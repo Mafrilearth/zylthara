@@ -1,6 +1,6 @@
+import type { Role } from "@prisma/client";
 import { auth } from "@/lib/auth/server";
 import { prisma } from "@/lib/prisma";
-import { Role } from "@prisma/client";
 
 export async function requireRole(allowedRoles: Role | Role[]) {
   const { data: session } = await auth.getSession();
@@ -26,4 +26,3 @@ export async function requireRole(allowedRoles: Role | Role[]) {
 
   return { session, user };
 }
-

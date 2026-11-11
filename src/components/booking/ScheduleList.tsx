@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { bookSchedule } from "@/lib/actions/booking";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { bookSchedule } from "@/lib/actions/booking";
 
 export type ScheduleItem = {
   id: string;
@@ -52,7 +46,9 @@ export function ScheduleList({ schedules }: { schedules: ScheduleItem[] }) {
     return (
       <div className="text-center py-16 text-slate-400 border border-dashed border-slate-800 rounded-xl bg-slate-900/30">
         <p className="text-base font-medium">Belum ada jadwal ujian yang dibuka saat ini.</p>
-        <p className="text-xs text-slate-500 mt-1">Silakan hubungi administrator institusi untuk informasi lebih lanjut.</p>
+        <p className="text-xs text-slate-500 mt-1">
+          Silakan hubungi administrator institusi untuk informasi lebih lanjut.
+        </p>
       </div>
     );
   }
@@ -92,8 +88,8 @@ export function ScheduleList({ schedules }: { schedules: ScheduleItem[] }) {
                 schedule.isBookedByMe
                   ? "border-blue-700 bg-blue-950/20"
                   : isFull
-                  ? "border-slate-800 bg-slate-900/40 opacity-75"
-                  : "border-slate-800 bg-slate-900/60 hover:border-slate-700"
+                    ? "border-slate-800 bg-slate-900/40 opacity-75"
+                    : "border-slate-800 bg-slate-900/60 hover:border-slate-700"
               }`}
             >
               <CardHeader className="pb-3">
@@ -168,4 +164,3 @@ export function ScheduleList({ schedules }: { schedules: ScheduleItem[] }) {
     </div>
   );
 }
-

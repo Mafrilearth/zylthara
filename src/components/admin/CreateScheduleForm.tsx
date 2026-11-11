@@ -1,16 +1,10 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { createSchedule, ScheduleActionState } from "@/lib/actions/schedule";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { createSchedule, type ScheduleActionState } from "@/lib/actions/schedule";
 
 const initialState: ScheduleActionState = {
   success: false,
@@ -62,9 +56,7 @@ export function CreateScheduleForm() {
                 required
                 className="bg-slate-950/60 border-slate-700 text-slate-100"
               />
-              {state.errors?.date && (
-                <p className="text-xs text-red-400">{state.errors.date[0]}</p>
-              )}
+              {state.errors?.date && <p className="text-xs text-red-400">{state.errors.date[0]}</p>}
             </div>
 
             <div className="space-y-1.5">
@@ -153,4 +145,3 @@ export function CreateScheduleForm() {
     </Card>
   );
 }
-

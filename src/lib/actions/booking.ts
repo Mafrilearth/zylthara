@@ -1,12 +1,12 @@
 "use server";
 
-import { headers } from "next/headers";
+import crypto from "node:crypto";
 import { revalidatePath } from "next/cache";
-import crypto from "crypto";
-import { requireRole } from "@/lib/auth/rbac";
-import { BookScheduleSchema } from "@/lib/validations/booking";
-import { prisma } from "@/lib/prisma";
+import { headers } from "next/headers";
 import { createAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/auth/rbac";
+import { prisma } from "@/lib/prisma";
+import { BookScheduleSchema } from "@/lib/validations/booking";
 
 export type BookingActionResult = {
   success: boolean;
@@ -147,7 +147,8 @@ export async function bookSchedule(scheduleId: string): Promise<BookingActionRes
     console.error("Booking error:", err);
     return {
       success: false,
-      message: err instanceof Error ? err.message : "Terjadi kesalahan saat memproses booking tiket.",
+      message:
+        err instanceof Error ? err.message : "Terjadi kesalahan saat memproses booking tiket.",
     };
   }
 }
@@ -258,4 +259,3 @@ export async function getMyTickets() {
     };
   });
 }
-
