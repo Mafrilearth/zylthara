@@ -5,7 +5,7 @@ export interface CreateAuditLogParams {
   action: string;
   entity: string;
   entityId?: string | null;
-  metadata?: Record<string, any> | any;
+  metadata?: Record<string, any> | null;
   ipAddress?: string | null;
   userAgent?: string | null;
 }
@@ -22,7 +22,7 @@ export async function createAuditLog(params: CreateAuditLogParams) {
       action: params.action,
       entity: params.entity,
       entityId: params.entityId ?? null,
-      metadata: params.metadata ?? null,
+      metadata: params.metadata ?? undefined,
       ipAddress: params.ipAddress ?? null,
       userAgent: params.userAgent ?? null,
     },
