@@ -91,8 +91,10 @@ Permitted tables in Phase 1, Phase 2, & Phase 3:
 | `Question` | Questions with choices and server-only answer key |
 | `Attempt` | Exam session attempts by test takers |
 | `Answer` | Test taker responses per question |
+| `Score` | Scaled section scores and total test scores (ITP scale) |
+| `Certificate` | Cryptographically verifiable exam completion certificate |
 
-Prohibited tables: `Score`, `Certificate`, `Payment`, `ExamFlag`.
+Prohibited tables: `Payment`, `ExamFlag`.
 
 ### 5.2 Tech Stack (Final, Immutable)
 

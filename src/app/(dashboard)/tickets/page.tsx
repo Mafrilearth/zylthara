@@ -108,7 +108,26 @@ async function TicketsList() {
                 </div>
               </div>
 
-              <StartExamButton scheduleId={ticket.schedule.id} />
+              {ticket.hasScore && ticket.attemptId ? (
+                <div className="pt-2 flex flex-col sm:flex-row gap-2">
+                  <Link href={`/results/${ticket.attemptId}`} className="flex-1">
+                    <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold">
+                      Lihat Hasil & Skor Ujian →
+                    </Button>
+                  </Link>
+                  <a
+                    href={`/api/certificate/${ticket.attemptId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="w-full sm:w-auto border-slate-700 text-slate-200 hover:bg-slate-800">
+                      Unduh PDF
+                    </Button>
+                  </a>
+                </div>
+              ) : (
+                <StartExamButton scheduleId={ticket.schedule.id} />
+              )}
             </CardContent>
           </Card>
         );

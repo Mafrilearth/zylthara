@@ -1,6 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
+import { randomUUID } from "node:crypto";
 import { requireRole } from "@/lib/auth/rbac";
 import {
   StartExamSchema,
@@ -14,6 +15,7 @@ import {
   checkAttemptTime,
   clearAttemptTimer,
 } from "@/lib/redis";
+import { calculateITPScores } from "@/lib/scoring";
 
 export async function startExam(scheduleId: string) {
   const headerList = await headers();
@@ -303,26 +305,87 @@ export async function submitExam(attemptId: string) {
       where: {
         id: attemptId,
         userId: user.id,
-        status: "IN_PROGRESS",
+        status: { in: ["IN_PROGRESS", "FINISHED"] },
         deletedAt: null,
       },
     });
 
     if (!attempt) {
-      return { success: false, message: "Sesi ujian tidak ditemukan atau sudah disubmit." };
+      return { success: false, message: "Sesi ujian tidak ditemukan." };
     }
-
-    // Mark as finished
-    await prisma.attempt.update({
-      where: { id: attemptId },
-      data: {
-        status: "FINISHED",
-        finishedAt: new Date(),
-      },
-    });
 
     // Clear timer in Redis
     await clearAttemptTimer(attemptId);
+
+    // Fetch all test questions to establish total breakdown per section
+    const allQuestions = await prisma.question.findMany({
+      where: { deletedAt: null },
+      select: { id: true, section: true, answerKey: true },
+    });
+
+    const totalQuestionsBySection = {
+      LISTENING: allQuestions.filter((q) => q.section === "LISTENING").length,
+      STRUCTURE: allQuestions.filter((q) => q.section === "STRUCTURE").length,
+      READING: allQuestions.filter((q) => q.section === "READING").length,
+    };
+
+    // Fetch test-taker's submitted answers
+    const answers = await prisma.answer.findMany({
+      where: { attemptId, deletedAt: null },
+      include: {
+        question: {
+          select: {
+            section: true,
+            answerKey: true,
+          },
+        },
+      },
+    });
+
+    // Compute standardized ITP scaled scores
+    const scoreResult = calculateITPScores(answers, totalQuestionsBySection);
+
+    // Persist Score record
+    const score = await prisma.score.upsert({
+      where: { attemptId },
+      create: {
+        attemptId,
+        listeningScore: scoreResult.listeningScore,
+        structureScore: scoreResult.structureScore,
+        readingScore: scoreResult.readingScore,
+        totalScore: scoreResult.totalScore,
+      },
+      update: {
+        listeningScore: scoreResult.listeningScore,
+        structureScore: scoreResult.structureScore,
+        readingScore: scoreResult.readingScore,
+        totalScore: scoreResult.totalScore,
+      },
+    });
+
+    // Issue Certificate record
+    const certCode = randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase();
+    const certNo = `ZYL-${new Date().getFullYear()}-${randomUUID().slice(0, 8).toUpperCase()}`;
+
+    const certificate = await prisma.certificate.upsert({
+      where: { attemptId },
+      create: {
+        attemptId,
+        certificateNo: certNo,
+        verificationCode: `ZYL-VRF-${certCode}`,
+        issuedAt: new Date(),
+      },
+      update: {},
+    });
+
+    // Mark attempt as SCORED
+    await prisma.attempt.update({
+      where: { id: attemptId },
+      data: {
+        status: "SCORED",
+        finishedAt: new Date(),
+      },
+    });
 
     // SEC-05, SEC-06: Audit Logging
     await createAuditLog({
@@ -332,6 +395,21 @@ export async function submitExam(attemptId: string) {
       entityId: attempt.id,
       metadata: {
         attemptId,
+        totalScore: score.totalScore,
+      },
+      ipAddress,
+      userAgent,
+    });
+
+    await createAuditLog({
+      userId: user.id,
+      action: "CERTIFICATE_ISSUED",
+      entity: "Certificate",
+      entityId: certificate.id,
+      metadata: {
+        attemptId,
+        certificateNo: certificate.certificateNo,
+        verificationCode: certificate.verificationCode,
       },
       ipAddress,
       userAgent,
@@ -339,13 +417,91 @@ export async function submitExam(attemptId: string) {
 
     return {
       success: true,
-      message: "Ujian berhasil diselesaikan dan disubmit.",
+      message: "Ujian berhasil dinilai dan sertifikat telah diterbitkan.",
+      attemptId,
+      score,
+      certificate,
     };
   } catch (err: unknown) {
     console.error("Submit exam error:", err);
     return {
       success: false,
       message: err instanceof Error ? err.message : "Gagal mengumpulkan ujian.",
+    };
+  }
+}
+
+export async function getExamResult(attemptId: string) {
+  try {
+    const { user } = await requireRole(["STUDENT", "ADMIN"]);
+
+    const attempt = await prisma.attempt.findFirst({
+      where: {
+        id: attemptId,
+        deletedAt: null,
+        ...(user.role !== "ADMIN" ? { userId: user.id } : {}),
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        schedule: {
+          select: {
+            id: true,
+            location: true,
+            date: true,
+            startTime: true,
+            endTime: true,
+          },
+        },
+        score: true,
+        certificate: true,
+        answers: {
+          select: {
+            id: true,
+            choice: true,
+            question: {
+              select: {
+                section: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!attempt || !attempt.score) {
+      return { success: false, message: "Hasil ujian belum tersedia." };
+    }
+
+    const totalQuestions = await prisma.question.count({
+      where: { deletedAt: null },
+    });
+
+    return {
+      success: true,
+      attempt: {
+        id: attempt.id,
+        status: attempt.status,
+        startedAt: attempt.startedAt,
+        finishedAt: attempt.finishedAt,
+        user: attempt.user,
+        schedule: attempt.schedule,
+        score: attempt.score,
+        certificate: attempt.certificate,
+        totalAnswered: attempt.answers.length,
+        totalQuestions,
+      },
+    };
+  } catch (err: unknown) {
+    console.error("Get exam result error:", err);
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Gagal memuat hasil ujian.",
     };
   }
 }

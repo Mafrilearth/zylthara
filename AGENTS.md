@@ -3,8 +3,8 @@
 ## 1. Project Identity
 
 - **Project**: Zylthara — Institutional Test Integrity Engine (Showcase Edition).
-- **Current Phase**: Phase 3 — Test Engine & Timer.
-- **Primary Goal**: Build a high-integrity institutional test engine with server-side Redis timer authority, non-leaking answer keys, and auto-save capabilities.
+- **Current Phase**: Phase 5 — Showcase Complete (Scoring, Certificate & Public Verification).
+- **Primary Goal**: Build a high-integrity institutional test engine with server-side Redis timer authority, non-leaking answer keys, auto-save capabilities, standardized ITP scoring, PDF certificate generation with QR verification, and public verification portal.
 
 ## 2. Immutable Tech Stack
 
@@ -24,8 +24,8 @@ Do NOT suggest or use any other framework, database, or library.
 
 ## 3. Active Phase Hard Constraints (The "Do NOT" List)
 
-- **Database Tables**: Only `User`, `AuditLog`, `Schedule`, `Booking`, `Passage`, `Question`, `Attempt`, `Answer`, and enums `Role`, `BookingStatus`, `Section`, `AttemptStatus` are permitted. Creating any other table (e.g., `Score`, `Certificate`, `Payment`, `ExamFlag`) is a CRITICAL FAILURE.
-- **Features**: Implement ONLY authentication, schedule booking, test engine with questions/passages, server-side timer, answer saving, and exam submission. Any other feature request must be added to `docs/BACKLOG.md` and NOT implemented.
+- **Database Tables**: Only `User`, `AuditLog`, `Schedule`, `Booking`, `Passage`, `Question`, `Attempt`, `Answer`, `Score`, `Certificate`, and enums `Role`, `BookingStatus`, `Section`, `AttemptStatus` are permitted. Creating any other table (e.g., `Payment`, `ExamFlag`) is a CRITICAL FAILURE.
+- **Features**: Implement ONLY authentication, schedule booking, test engine with questions/passages, server-side timer, answer saving, exam submission, scoring (ITP scale), certificate issuance with PDF & QR code, and public certificate verification. Any other feature request must be added to `docs/BACKLOG.md` and NOT implemented.
 - **Scope Creep**: Never start a new feature, refactor, or add a dependency without explicit user approval.
 
 ## 4. Mandatory Security & Quality Gates (SEC-01 to SEC-10)
@@ -77,8 +77,8 @@ When asked to build a feature, respond in this exact order:
 
 ## This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in node_modules/next/dist/docs/ (resolved from this file's directory; in monorepos the next package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-This block is written and re-added by next dev — verify at node_modules/next/dist/server/lib/generate-agent-files.js. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->

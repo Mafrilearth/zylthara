@@ -224,18 +224,38 @@ export async function getMyTickets() {
     },
   });
 
-  return tickets.map((t) => ({
-    id: t.id,
-    ticketCode: t.ticketCode,
-    status: t.status,
-    createdAt: t.createdAt,
-    schedule: {
-      id: t.schedule.id,
-      date: t.schedule.date,
-      startTime: t.schedule.startTime,
-      endTime: t.schedule.endTime,
-      location: t.schedule.location,
+  const attempts = await prisma.attempt.findMany({
+    where: {
+      userId: currentUser.id,
+      deletedAt: null,
     },
-  }));
+    include: {
+      score: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return tickets.map((t) => {
+    const latestAttempt = attempts.find((a) => a.scheduleId === t.schedule.id);
+
+    return {
+      id: t.id,
+      ticketCode: t.ticketCode,
+      status: t.status,
+      createdAt: t.createdAt,
+      schedule: {
+        id: t.schedule.id,
+        date: t.schedule.date,
+        startTime: t.schedule.startTime,
+        endTime: t.schedule.endTime,
+        location: t.schedule.location,
+      },
+      attemptId: latestAttempt?.id || null,
+      attemptStatus: latestAttempt?.status || null,
+      hasScore: Boolean(latestAttempt?.score),
+    };
+  });
 }
 

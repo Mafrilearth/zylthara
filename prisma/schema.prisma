@@ -28,6 +28,7 @@ enum Section {
 enum AttemptStatus {
   IN_PROGRESS
   FINISHED
+  SCORED
   EXPIRED
   ABANDONED
 }
@@ -149,6 +150,8 @@ model Attempt {
   deletedAt   DateTime?
 
   answers     Answer[]
+  score       Score?
+  certificate Certificate?
 
   @@index([userId])
   @@index([scheduleId])
@@ -168,4 +171,35 @@ model Answer {
   @@unique([attemptId, questionId])
   @@index([attemptId])
   @@index([questionId])
+}
+
+model Score {
+  id              String    @id @default(uuid()) @db.Uuid
+  attemptId       String    @unique @db.Uuid
+  attempt         Attempt   @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  listeningScore  Int       @default(0)
+  structureScore  Int       @default(0)
+  readingScore    Int       @default(0)
+  totalScore      Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  @@index([attemptId])
+}
+
+model Certificate {
+  id               String    @id @default(uuid()) @db.Uuid
+  attemptId        String    @unique @db.Uuid
+  attempt          Attempt   @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  certificateNo    String    @unique
+  verificationCode String    @unique
+  issuedAt         DateTime  @default(now())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  @@index([attemptId])
+  @@index([verificationCode])
+  @@index([certificateNo])
 }

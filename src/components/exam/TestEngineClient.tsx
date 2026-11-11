@@ -136,7 +136,18 @@ export function TestEngineClient({
               Seluruh lembar jawaban Anda telah tersimpan secara resmi di server integritas Zylthara.
             </p>
           </div>
-          <div className="pt-2">
+          <div className="pt-2 flex flex-col gap-3">
+            <Button
+              onClick={() => {
+                startTransition(() => {
+                  router.push(`/results/${attemptId}`);
+                  router.refresh();
+                });
+              }}
+              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold"
+            >
+              Lihat Hasil & Skor Ujian →
+            </Button>
             <Button
               onClick={() => {
                 startTransition(() => {
@@ -144,7 +155,8 @@ export function TestEngineClient({
                   router.refresh();
                 });
               }}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium"
+              variant="outline"
+              className="w-full border-slate-700 text-slate-300 hover:bg-slate-800"
             >
               Kembali ke Menu Tiket
             </Button>
