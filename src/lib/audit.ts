@@ -1,12 +1,18 @@
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+
+export type AuditMetadata =
+  | Record<string, unknown>
+  | string
+  | number
+  | boolean
+  | null;
 
 export interface CreateAuditLogParams {
   userId?: string | null;
   action: string;
   entity: string;
   entityId?: string | null;
-  metadata?: Prisma.InputJsonValue;
+  metadata?: AuditMetadata;
   ipAddress?: string | null;
   userAgent?: string | null;
 }
@@ -23,7 +29,7 @@ export async function createAuditLog(params: CreateAuditLogParams) {
       action: params.action,
       entity: params.entity,
       entityId: params.entityId ?? null,
-      metadata: params.metadata ?? Prisma.JsonNull,
+      metadata: (params.metadata as any) ?? undefined,
       ipAddress: params.ipAddress ?? null,
       userAgent: params.userAgent ?? null,
     },
