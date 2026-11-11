@@ -53,13 +53,10 @@ export default function RegisterPage() {
       <div className="w-full max-w-md space-y-6">
         {/* Header Branding */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-950/80 text-blue-400 border border-blue-800">
-            Zylthara Engine • Phase 1
-          </div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">
-            Daftar Akun Peserta
+            Zylthara
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm font-medium text-slate-400">
             Institutional Test Integrity Engine
           </p>
         </div>
@@ -181,3 +178,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

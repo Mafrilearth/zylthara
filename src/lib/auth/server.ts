@@ -6,3 +6,4 @@ export const auth = createNeonAuth({
     secret: process.env.NEON_AUTH_COOKIE_SECRET || "default_development_secret_at_least_32_characters_long",
   },
 });
+

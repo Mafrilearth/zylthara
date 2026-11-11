@@ -116,3 +116,4 @@ export async function registerUser(
   // Redirect ke halaman login setelah registrasi berhasil
   redirect("/login");
 }
+
