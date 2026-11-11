@@ -164,9 +164,10 @@ export async function loginUser(
     });
 
     if (authError || !authData) {
+      console.error("Neon Auth sign-in failed:", authError);
       return {
         success: false,
-        message: "Email atau password salah",
+        message: authError?.message || "Email atau password salah",
       };
     }
 
@@ -195,10 +196,10 @@ export async function loginUser(
       });
     }
   } catch (err: unknown) {
-    console.error("Login error:", err);
+    console.error("Login unexpected error:", err);
     return {
       success: false,
-      message: "Email atau password salah",
+      message: err instanceof Error ? err.message : "Terjadi kesalahan saat memproses login.",
     };
   }
 
